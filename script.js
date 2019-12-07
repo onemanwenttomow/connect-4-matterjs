@@ -1,9 +1,11 @@
-var welcome = document.getElementsByClassName('welcome')[0];
-
-setTimeout(function() {
-    console.log(welcome);
-    welcome.style.display = "none";
-} ,2000);
+// var welcome = document.getElementsByClassName('welcome')[0];
+// var board = document.getElementsByClassName('board')[0];
+//
+// setTimeout(function() {
+//     console.log(welcome);
+//     welcome.classList.add("invisible");
+//     board.classList.remove("hidden");
+// } ,2500);
 
 window.addEventListener("load", function() {
     //Fetch our canvas
@@ -24,61 +26,31 @@ window.addEventListener("load", function() {
         }
     });
 
-    //Add a ball
-    var redBalls = generateBalls(20, "red", 200);
-    var yellowBalls = generateBalls(20, "yellow", 1400);
-    Matter.World.add(world, redBalls);
-    Matter.World.add(world, yellowBalls);
+    //Add pieces
+    var redPieces = generateBalls(20, "red", 200);
+    var yellowPieces = generateBalls(20, "yellow", 1300);
+    Matter.World.add(world, redPieces);
+    Matter.World.add(world, yellowPieces);
 
-    //Add a floor
-    var floor = Matter.Bodies.rectangle(
-        percentX(50),
-        percentY(99),
-        percentX(100),
-        10,
-        {
-            isStatic: true, //An immovable object
-            render: {
-                visible: true
-            }
-        }
-    );
+    //generate outer constraints
 
-    var leftWall = Matter.Bodies.rectangle(
-        percentX(1),
-        percentY(50),
-        40,
-        percentY(100),
-        {
-            isStatic: true, //An immovable object
-            render: {
-                visible: true
-            }
-        }
-    );
+    //floor
+    outerContraints(percentX(50), percentY(99), percentX(100), 10);
 
-    var rightWall = Matter.Bodies.rectangle(
-        percentX(99),
-        percentY(50),
-        40,
-        percentY(100),
-        {
-            isStatic: true, //An immovable object
-            render: {
-                visible: true
-            }
-        }
-    );
+    //left left
+    outerContraints(percentX(1), percentY(50), 40, percentY(100));
+
+    // right wall
+    outerContraints(percentX(99), percentY(50), 40, percentY(100));
 
 
-    var col;
-    var x = 400;
-    for (var i = 0; i < 8; i++) {
-        col = Matter.Bodies.rectangle(
+    var wall;
+    function outerContraints(x, y, width, height) {
+        wall = Matter.Bodies.rectangle(
             x,
-            400,
-            10,
-            500,
+            y,
+            width,
+            height,
             {
                 isStatic: true, //An immovable object
                 render: {
@@ -86,30 +58,19 @@ window.addEventListener("load", function() {
                 }
             }
         );
-        x += 100;
-        Matter.World.add(world, col);
+        Matter.World.add(world, wall);
     }
 
-    var boardBase = Matter.Bodies.rectangle(
-        750,
-        650,
-        710,
-        10,
-        {
-            isStatic: true, //An immovable object
-            render: {
-                visible: true
-            }
-        }
-    );
+    // add columns to the board
+    var x = 400;
+    for (var i = 0; i < 8; i++) {
+        outerContraints(x, 400, 10, 500);
+        x += 100;
+    }
 
-
-
-    Matter.World.add(world, boardBase);
-    Matter.World.add(world, floor);
-    Matter.World.add(world, leftWall);
-    Matter.World.add(world, rightWall);
-
+    // board base
+    console.log(Matter.World);
+    outerContraints(750, 650, 710, 10);
 
     //Make interactive
     var mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -119,7 +80,7 @@ window.addEventListener("load", function() {
             render: {
                 visible: false
             },
-            stiffness: 0.8
+            stiffness: 1
         }
     });
     Matter.World.add(world, mouseConstraint);
@@ -128,19 +89,20 @@ window.addEventListener("load", function() {
     Matter.Engine.run(engine);
     Matter.Render.run(render);
 
+
     function generateBalls(num, col, startX) {
         var balls = [];
         for (var i = 0; i < num; i++) {
             balls.push(
                 Matter.Bodies.circle(
-                    startX,
-                    percentY(10),
+                    Math.random() * 50 + startX,
+                    Math.random() * 400 + percentY(5),
                     45,
                     {
-                        // density: 1.14,
-                        // friction: 0.11,
+                        // density: 100.14,
+                        // friction: 1.11,
                         // frictionAir: 0.0221,
-                        // restitution: 0.9,
+                        // restitution: 0.5,
                         render: {
                             fillStyle: col,
                             strokeStyle: "black",
@@ -158,14 +120,4 @@ function percentX(percent) {
 }
 function percentY(percent) {
     return Math.round((percent / 100) * window.innerHeight);
-}
-
-function randomColor() {
-    function getRandomNumber(num) {
-        return Math.floor(Math.random() * num);
-    }
-    var r = getRandomNumber(256);
-    var g = getRandomNumber(256);
-    var b = getRandomNumber(256);
-    return "rgb(" + r + "," + g + "," + b + ")";
 }
