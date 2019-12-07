@@ -1,0 +1,51 @@
+body {
+    overflow: hidden;
+}
+
+* {
+    margin: 0;
+    /* box-sizing: border-box; */
+}
+
+.board {
+    display: inline-flex;
+    position: absolute;
+    top: 106px;
+    right: 435px;
+    z-index: 100;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+body {
+    background: lightyellow
+}
+
+.welcome {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    text-align: center;
+    background-color: hotpink;
+}
+
+
+.slot {
+    height: 90px;
+    width:100px;
+    overflow: hidden;
+}
+.hole {
+    height: 80px;
+    width:80px;
+    border-radius: 50%;
+    border: 40px solid dodgerblue;
+    transform: translate(-30px, -30px);
+}
