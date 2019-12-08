@@ -10,8 +10,8 @@ body {
 .board {
     display: inline-flex;
     position: absolute;
-    top: 106px;
-    right: 435px;
+    bottom: 202px;
+    left: 500px;
     z-index: 100;
     animation-name: fadein;
     animation-duration: 0.5s;
@@ -29,30 +29,16 @@ body {
     background: lightyellow;
 }
 
-.welcome {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: lightyellow;
-    color: dodgerblue;
-    font-size: 40px;
-}
-
 .slot {
-    height: 90px;
-    width:100px;
+    height: 40px;
+    width: 50px;
     overflow: hidden;
 }
 
 .hole {
-    height: 80px;
-    width:80px;
+    height: 30px;
+    width: 30px;
     border-radius: 50%;
-    border: 40px solid dodgerblue;
-    transform: translate(-30px, -30px);
+    border: 25px solid dodgerblue;
+    transform: translate(-15px, -15px);
 }
