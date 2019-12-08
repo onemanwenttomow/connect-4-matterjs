@@ -1,11 +1,3 @@
-// var welcome = document.getElementsByClassName('welcome')[0];
-// var board = document.getElementsByClassName('board')[0];
-//
-// setTimeout(function() {
-//     console.log(welcome);
-//     welcome.classList.add("invisible");
-//     board.classList.remove("hidden");
-// } ,2500);
 
 window.addEventListener("load", function() {
     //Fetch our canvas
@@ -53,7 +45,8 @@ window.addEventListener("load", function() {
     }
 
     // board base
-    outerContraints(675, 525, 360, 10);
+    var boardBase = outerContraints(675, 525, 360, 10);
+    console.log(boardBase);
 
     //Make interactive
     var mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -72,10 +65,13 @@ window.addEventListener("load", function() {
     Matter.Engine.run(engine);
     Matter.Render.run(render);
 
+    console.log(world);
+
+
     function checkPositions() {
         console.log("*********");
         for (var i = 0; i < 40; i++) {
-            console.log("world: ", world.bodies[i].position);
+            // console.log("world: ", world.bodies[i].position);
 
         }
 
@@ -83,7 +79,7 @@ window.addEventListener("load", function() {
 
         // console.log("world: ", world.bodies[3].position);
         // console.log("world: ", world.bodies[39].position);
-        setTimeout(checkPositions, 500);
+        // setTimeout(checkPositions, 500);
     }
 
     checkPositions();
@@ -104,7 +100,21 @@ window.addEventListener("load", function() {
             }
         );
         Matter.World.add(world, wall);
+        return wall;
     }
+
+    document.body.addEventListener("mouseup", function(e) {
+        var y = mouseConstraint.constraint.pointA.y;
+        console.log(mouseConstraint.constraint.pointA);
+        if (y > 520 && y < 530) {
+            console.log(boardBase.isStatic);
+            boardBase.isStatic = false;
+            setTimeout(function() {
+                boardBase = outerContraints(675, 525, 360, 10);
+            }, 5000);
+        }
+    });
+
 
     function generateBalls(num, col, startX) {
         var balls = [];
