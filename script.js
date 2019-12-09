@@ -35,8 +35,6 @@ window.addEventListener("load", function() {
     // right wall
     outerContraints(percentX(99), percentY(50), 40, percentY(100));
 
-
-
     // add columns to the board
     var x = 500;
     for (var i = 0; i < 8; i++) {
@@ -46,7 +44,6 @@ window.addEventListener("load", function() {
 
     // board base
     var boardBase = outerContraints(675, 525, 360, 10);
-    console.log(boardBase);
 
     //Make interactive
     var mouseConstraint = Matter.MouseConstraint.create(engine, {
@@ -65,7 +62,6 @@ window.addEventListener("load", function() {
     Matter.Engine.run(engine);
     Matter.Render.run(render);
 
-    console.log(world);
 
     var boardPositions = [];
     var position, col, row, gameOver;
@@ -82,9 +78,6 @@ window.addEventListener("load", function() {
                 gameOver = updateBoardPosition(col, row, world.bodies[i].render.fillStyle);
             }
         }
-        console.log("*********");
-        count ++;
-        console.log("caling: ", count, gameOver);
         if (gameOver) { return; }
         setTimeout(checkPositions, 1000);
     }
@@ -101,29 +94,16 @@ window.addEventListener("load", function() {
     }
 
     function updateBoardPosition(col, row, colour) {
-        if (row !== 0 && boardPositions[col][row - 1] !== colour[0]) { return; }
+        // console.log("colour[0]: ", colour[0]);
+        if (row !== 0 && boardPositions[col][row - 1] === "x") { return; }
         boardPositions[col][row] = colour[0];
-        if (colVictory()) {
-            console.log("COL VIC");
+        if (colVictory() || rowVictory() || diagVictory()) {
             return true;
         }
-        if (rowVictory()) {
-            console.log("ROW VIC!");
-            return true;
-        }
-        // console.log("Board Posititons: *****************");
-        // console.log(boardPositions[0]);
-        // console.log(boardPositions[1]);
-        // console.log(boardPositions[2]);
-        // console.log(boardPositions[3]);
-        // console.log(boardPositions[4]);
-        // console.log(boardPositions[5]);
-        // console.log(boardPositions[6]);
-        // console.log("/Board Posititons: *****************");
     }
 
     function colVictory(){
-        var domCols = Array.from(document.getElementsByClassName('col'));
+        var domCols = document.getElementsByClassName('col');
         for (var i = 0; i < boardPositions.length; i++) {
             if (boardPositions[i].join("").indexOf("rrrr") > -1) {
                 addWinningClasses(boardPositions[i], "r", domCols[i].children);
@@ -146,8 +126,6 @@ window.addEventListener("load", function() {
                 domRows.push(slots[i]);
                 rowToCheck.push(boardPositions[p][i]);
             }
-            console.log("rowToCheck: ", rowToCheck);
-            console.log("rowToCheck JOIN: ", rowToCheck.join(""));
             if (rowToCheck.join("").indexOf("rrrr") > -1) {
                 addWinningClasses(rowToCheck, "r", domRows.reverse());
                 return true;
@@ -159,8 +137,42 @@ window.addEventListener("load", function() {
         }
     }
 
+    function diagVictory() {
+        console.log("checking diag...");
+        for (var i = 0; i < boardPositions.length; i++) {
+            // console.log("checking: ", boardPositions[i]);
+            var str = ""
+            var strNeg = "";
+            // console.log(boardPositions[i][0]);
+            str += boardPositions[i][0];
+            strNeg += boardPositions[i][0];
+            for (var j = 1; j < 4; j++) {
+                if (boardPositions[i + 1]) {
+                    str+=boardPositions[i + 1][j];
+                }
+            }
+
+            for (var k = 1; k < 4; k++) {
+                if (boardPositions[i - 1]) {
+                    strNeg+=boardPositions[i - 1][k];
+                }
+            }
+            console.log(strNeg);
+            if (str === "rrrr" || strNeg === "rrrr") {
+                console.log("red diag win:");
+                console.log(i, j, k);
+            } else if (str === "yyyy" || strNeg == "yyyy") {
+                console.log("yellow diag win:");
+                console.log(i, j, k);
+            }
+
+            // console.log(boardPositions[i + 2] && boardPositions[i + 2][0 + 2]);
+            // console.log(boardPositions[i + 3] && boardPositions[i + 3][0 + 3]);
+
+        }
+    }
+
     function addWinningClasses(col, player, elems) {
-        console.log("col, player", col, player, elems);
         elems = Array.from(elems).reverse();
         for (var i = 0; i < col.length; i++) {
             if (col[i] === player && col[i+1] === player && col[i+2] === player && col[i+3] ===player) {
