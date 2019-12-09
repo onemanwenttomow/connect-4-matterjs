@@ -13,9 +13,22 @@ body {
     bottom: 202px;
     left: 500px;
     z-index: 100;
-    animation-name: fadein;
-    animation-duration: 0.5s;
-    animation-delay: 1.8s;
+}
+
+.board-base {
+    height: 10px;
+    width: 370px;
+    background-color: dodgerblue;
+    position: absolute;
+    left: -10px;
+    top: 240px;
+    pointer-events: none;
+    transition: 1s;
+}
+
+.open {
+    transition: 1s;
+    left: 0px;
 }
 
 .container {
@@ -24,6 +37,16 @@ body {
     align-items: center;
     min-height: 100vh;
 }
+
+.r {
+    background-color: hotpink;
+}
+
+.y {
+    background-color: goldenrod;
+}
+
+
 
 body {
     background: lightyellow;
