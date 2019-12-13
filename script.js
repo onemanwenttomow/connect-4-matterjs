@@ -138,7 +138,6 @@ window.addEventListener("load", function() {
     }
 
     function diagVictory() {
-        console.log("checking diag...");
         for (var i = 0; i < boardPositions.length; i++) {
             // console.log("checking: ", boardPositions[i]);
             var str = ""
